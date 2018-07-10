@@ -1,0 +1,36 @@
+apply plugin: 'com.lsl.apkdist'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.2'
+
+
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+
+apkdistconf{
+    nameMap {
+        name ->
+            println 'hello,'+name
+            return name
+    }
+
+    destDir 'you name is lsl'
+}

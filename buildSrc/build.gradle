@@ -1,0 +1,15 @@
+apply plugin: 'groovy'
+
+
+repositories {
+    mavenCentral()
+    google()
+    jcenter()
+}
+
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    compile gradleApi()
+    compile localGroovy()
+}
