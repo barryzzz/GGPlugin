@@ -12,8 +12,8 @@ class ApkbuildTask extends DefaultTask {
     @TaskAction
     def hello() {
         println "hello world $message"
-        File file=new File(project.getBuildDir(),"xxxxxx")
-        if(!file.exists()){
+        File file = new File(project.getBuildDir(), "xxxxxx")
+        if (!file.exists()) {
             file.createNewFile()
         }
     }

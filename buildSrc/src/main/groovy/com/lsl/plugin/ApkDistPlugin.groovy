@@ -2,6 +2,7 @@ package com.lsl.plugin
 
 import com.lsl.plugin.task.ApkReleaseTask
 import com.lsl.plugin.task.ApkbuildTask
+import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 
 class ApkDistPlugin extends BasePlugin {
@@ -16,6 +17,20 @@ class ApkDistPlugin extends BasePlugin {
     @Override
     protected void configProject() {
         super.configProject()
+        writeDespenons()
+
+        syncConfig()
+
+
+
+        project.subprojects.each { sub ->
+
+            sub.afterEvaluate {
+                syncConfig(sub)
+
+            }
+        }
+
     }
 
     @Override
@@ -32,6 +47,50 @@ class ApkDistPlugin extends BasePlugin {
         project.task('apkRelease', group: 'apk', type: ApkReleaseTask,
                 description: 'apkRelease')
 
+    }
 
+
+    void writeDespenons() {
+        project.subprojects.each {
+            File file = it.buildFile
+            def enter = false
+            def text = ''
+            file.eachLine {
+                if (enter) {
+                    if (it.startsWith('}')) {
+                        return
+                    }
+                    text += it + System.lineSeparator()
+                }
+                if (it.startsWith("dependencies {")) {
+                    enter = true
+                }
+            }
+            println text
+
+        }
+
+
+    }
+
+
+    static void syncConfig(Project project) {
+        if (project == null) {
+            return
+        }
+
+        project.configurations.all { cfg ->
+            cfg.resolutionStrategy {
+                eachDependency { details ->
+                    def module = details.requested
+                    println "group:$module.group ,name:$module.name,version:$module.version"
+                    if(module.group.equals('com.android.support')&&!module.name.equals('multidex')){
+                        details.useVersion('22.2.1')
+                    }
+
+                }
+            }
+
+        }
     }
 }

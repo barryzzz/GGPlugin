@@ -25,12 +25,27 @@ task clean(type: Delete) {
 
 
 
-apkdistconf{
+apkdistconf {
     nameMap {
         name ->
-            println 'hello,'+name
+            println 'hello,' + name
             return name
     }
 
     destDir 'you name is lsl'
+}
+
+
+
+task hello(group: 'apk') {
+
+    println('hello world')
+
+    doLast {
+        println 'hello bye'
+    }
+
+    doFirst {
+        println 'hello start'
+    }
 }
